@@ -68,13 +68,33 @@ class Receiver:
         return datetime.datetime.today().microsecond
 
 
+def input_filename():
+    while True:
+        print("register_name: ", end="")
+        file_name = input()
+        if (not file_name):
+            print("Please input filename")
+            continue
+        break
+    file_name = file_name + ".sig"
+    return file_name
+
+
 if __name__ == "__main__":
+    import pickle
+    import sys
+
+    file_dir = "data/RE208/"
+
+    print("Input signal to Receiver")
     receiver = Receiver()
     receiver.start()
     signal_bin = receiver.analyze()
     print(signal_bin)
-    print("register_name: ", end="")
-    file_name = input()
-    if (not file_name):
-        print("empty")
-    print(file_name)
+    print("Do you save this? (yes/no): ", end="")
+    if (input() != "yes"):
+        sys.exit()
+    file_name = input_filename()
+    with open(file_dir+file_name, "wb") as f:
+        pickle.dump(signal_bin, f)
+    print("Saved!! : " + file_dir + file_name)
